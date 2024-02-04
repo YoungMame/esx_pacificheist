@@ -20,28 +20,6 @@ RegisterNetEvent("esx_pacificheist:receiveVaultInfos", function(status)
     VaultOpen = status
 end)
 
-function OpenOrLock(hash, coords, freeze)
-    CreateThread(function()
-        local door = ESX.Game.GetClosestObject(coords, {[GetHashKey(hash)] = true})
-        --local door = GetClosestObjectOfType(coords, 10.0, hash, false, false, false)
-        Wait(100)
-        print(door)
-        FreezeEntityPosition(door, freeze)
-    end)
-end
-
-CreateThread(function()
-    Wait(5000)
-    ESX.TriggerServerCallback("esx_pacificheist:getHeistInfos", function(cb) 
-        HeistInProgress = cb
-        if cb == false then
-            OpenOrLock("hei_v_ilev_bk_gate_pris", Config.Zones.StartHeist, true)
-            OpenOrLock("hei_v_ilev_bk_gate2_pris", Config.Zones.SecondDoor, true)
-            OpenOrLock("hei_v_ilev_bk_safegate_pris", Config.Zones.ThirdDoor, true)
-        end
-    end)
-end)
-
 function SecondDoor()
     CreateThread(function()
         local ms = 1000
